@@ -18,7 +18,7 @@ print('        Therefore, User of this software will need to ensure the security
 print(' -------------------------------------------------------------------------------------------------------')
 
 def generate_xml(filename, output_fields):
-    out_file = open('./xml_output/' + filename[:-4] + '.xml', 'w')
+    out_file = open('./xml_output/' + filename + '.xml', 'w')
     out_file.writelines('<?xml version="1.0" encoding="UTF-8" ?>\n')
     out_file.writelines('<File>\n')
     out_file.writelines('<FileName>' + filename + '</FileName>\n')
@@ -38,9 +38,11 @@ fields_to_anonymize = ['PatientsName', 'PatientID', 'AccessionNumber', 'PixelDat
 #                     'ImagePositionPatient','ImageOrientationPatient'
 #                     ]
 for file in os.listdir("./dicom_input/"):
-    if('.dcm' not in file): #check for dicom file extension
+    try: dicom_file = pydicom.dcmread("./dicom_input/" + file)
+    except:
+        print('Error! Not a valid dicom file. ' + input_file)
         continue
-    dicom_file = pydicom.dcmread("./dicom_input/" + file)
+
     if(dicom_file.data_element('ImageType') == None):
         shutil.move("./dicom_input/" + file, "./derived_secondary_dicom/" + file)
         continue
