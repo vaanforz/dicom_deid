@@ -3,7 +3,6 @@ import os
 import shutil
 import pydicom
 
-os.system('clear')
 print('\n\n\n -------------------------------------------------------------------------------------------------------')
 print(' ---------------------------     DICOM to XML Converter     ------------------------')
 print(' -------------------------------------------------------------------------------------------------------')
@@ -38,15 +37,15 @@ fields_to_anonymize = ['PatientsName', 'PatientID', 'AccessionNumber', 'PixelDat
 #                     'StudyInstanceUID','SeriesInstanceUID',
 #                     'ImagePositionPatient','ImageOrientationPatient'
 #                     ]
-for file in os.listdir("./dicom_files/"):
+for file in os.listdir("./dicom_input/"):
     if('.dcm' not in file): #check for dicom file extension
         continue
-    dicom_file = pydicom.dcmread("./dicom_files/" + file)
+    dicom_file = pydicom.dcmread("./dicom_input/" + file)
     if(dicom_file.data_element('ImageType') == None):
-        shutil.move("./dicom_files/" + file, "./derived_secondary_dicom/" + file)
+        shutil.move("./dicom_input/" + file, "./derived_secondary_dicom/" + file)
         continue
     if('derived' in (str(dicom_file['ImageType'].value)).lower()): #transfer derived/secondary files for isolation first
-        shutil.move("./dicom_files/" + file, "./derived_secondary_dicom/" + file)
+        shutil.move("./dicom_input/" + file, "./derived_secondary_dicom/" + file)
         continue
     output_fields = []
     dicom_file.remove_private_tags()
